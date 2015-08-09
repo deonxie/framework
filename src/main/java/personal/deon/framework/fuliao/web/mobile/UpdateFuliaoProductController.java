@@ -69,7 +69,7 @@ public class UpdateFuliaoProductController extends GenericController {
 			model.addFlashAttribute("errorMsg","添加成功");
 		}else
 			model.addFlashAttribute("errorMsg","产品名字未填，不能保存产品");
-		return REDIRECT+"/mobile/product/update";
+		return REDIRECT+"/mobile/product/option/update";
 	}
 	
 	@ModelAttribute("initproduct")
