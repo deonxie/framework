@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="personal.deon.framework.fuliao.repository.mybatis.OrderMapper">
+    <!-- 用户订单 -->
+	<select id="findUserOrdersBypage" useCache="true" resultType="java.util.HashMap" 
+	    parameterType="personal.deon.framework.fuliao.dto.PageUtilDto">
+	    select fur.id,fur.create_Time as createtime,fur.pay_Status as payStatus,
+	     fur.handsel,fur.amount,fur.freight,fur.order_Id as orderId,fur.deal_Status as dealStatus
+	    from fuliao_orderrecord fur  
+	    where fur.own_User = #{userid} 
+	    <choose><!-- 1待付款 2已付定金 3 已付全款 4 已完成 -->
+	    	<when test="page.field.option ==1"> and fur.pay_Status=0 and (fur.deal_Status=0 or fur.deal_Status=1)</when>
+	    	<when test="page.field.option ==2"> and fur.pay_Status=1 and (fur.deal_Status=0 or fur.deal_Status=1) </when>
+	        <when test="page.field.option ==3"> and fur.pay_Status=2 and (fur.deal_Status=0 or fur.deal_Status=1)</when> 
+	        <when test="page.field.option ==4"> and (fur.pay_Status=2 or fur.pay_Status=-1) and (fur.deal_Status=2 or fur.deal_Status =-1) </when>
+	    </choose> order by fur.create_Time desc
+	    limit #{page.pageSize} offset #{page.offset}
+	</select>
+	
+	<!-- 商家订单 -->
+	<select id="findShopOrdersBypage" useCache="true" resultType="java.util.HashMap" 
+	    parameterType="personal.deon.framework.fuliao.dto.PageUtilDto">
+	    select fsr.id,fsr.order_Id as orderId,fsr.handsel,fsr.amount,fsr.create_Time as createtime,
+	    	fsr.deal_Status as dealStatus,fsr.pay_Status as payStatus 
+	    from fuliao_shoporderrecord fsr left join fuliao_shop fs on fsr.own_Shop = fs.id
+	    where fs.shopkeeper = #{userid}
+	    <choose>
+	    	<when test="page.field.option ==1"> and fsr.deal_Status=0 </when>
+	    	<when test="page.field.option ==2"> and fsr.deal_Status=1 </when>
+	        <when test="page.field.option ==3"> and fsr.deal_Status=-1 </when>
+	    </choose>
+	    order by fsr.create_Time asc,fsr.amount desc
+	    limit #{page.pageSize} offset #{page.offset}
+	</select>
+</mapper> 
+
+	

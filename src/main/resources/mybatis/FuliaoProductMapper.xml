@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="personal.deon.framework.fuliao.repository.mybatis.FuliaoProductMapper">
+    <!-- 平台首页推荐产品 -->
+    <select id="homePageProducts" resultType="java.util.HashMap" useCache="true">
+    select fp.id,fp.name,fp.units,fp.model,fp.stock_Num as sotcknum,fp.price,      
+    fp.sale_Num as salenum,fp.grade_Score as gradescore,fp.coverimg
+    from fuliao_Product fp inner join fuliao_shop fs on fp.shop= fs.id 
+    inner join fuliao_user fec on fs.shopkeeper = fec.id 
+    where fp.status=0 and fs.status=1 
+    order by fec.vip_Level desc,fec.shop_Level desc,fp.stock_Num desc,fp.create_Time desc
+    limit 12 offset 0
+    </select>
+<!-- 平台产品列表首页 -->
+<select id="fuliaoproductIndexPage" resultType="java.util.HashMap" useCache="true" 
+    parameterType="personal.deon.framework.fuliao.dto.PageUtilDto">
+    select fp.id,fp.name,fp.units,fp.model,fp.stock_Num as sotcknum,fp.price,
+    	fp.sale_Num as salenum,fp.grade_Score as gradescore,fp.coverimg
+    from fuliao_Product fp inner join fuliao_shop fs on fp.shop= fs.id 
+    inner join fuliao_user fec on fs.shopkeeper = fec.id 
+    left join fuliao_producttype fpt on fp.type = fpt.id
+    where fp.status=0 and fs.status=1 
+    <if test="page.field.keyword !=null">
+        and( fp.name like '%'||#{page.field.keyword}||'%'
+        or fp.texture like '%'||#{page.field.keyword}||'%'
+        or fpt.type_Name like '%'||#{page.field.keyword}||'%'
+        )
+    </if><choose>
+    	<when test="page.field.typeid !=null"> and fp.type =#{page.field.typeid}</when>
+    	<otherwise>
+		     <if test="page.fields.typeid !=null"> and fp.type in
+		   		<foreach collection="page.fields.typeid" open="(" close=")" 
+		   	    	separator="," item="item" index="index">#{item}</foreach>
+		    </if>
+    	</otherwise>
+    </choose>
+    order by fec.vip_Level desc<if test="page.field.createTime !=null">
+     	,fp.create_Time ${page.field.createTime}</if>
+     <if test="page.field.saleNum !=null">
+     	,fp.sale_Num ${page.field.saleNum}
+     </if><if test="page.field.price !=null">
+     	,fp.price ${page.field.price}
+     </if>,fp.create_Time desc
+     limit #{page.pageSize} offset #{page.offset}
+</select>
+<!-- 个人产品列表首页 -->
+<select id="selfProductPage" resultType="java.util.HashMap" useCache="true" 
+    parameterType="personal.deon.framework.fuliao.dto.PageUtilDto">
+    select fp.id,fp.name,fp.units,fp.model,fp.stock_Num as sotcknum,fp.price,fp.create_Time as createTime,
+    	fp.sale_Num as salenum,fp.grade_Score as gradescore,fp.coverimg,fp.status
+    from fuliao_Product fp inner join fuliao_shop fs on fp.shop= fs.id 
+    inner join fuliao_user fec on fs.shopkeeper = fec.id 
+    left join fuliao_producttype fpt on fp.type = fpt.id
+    where fec.id=#{userid} <if test="page.field.status !=null">
+    	and fp.status=#{page.field.status}::int 
+    </if><if test="page.field.keyword !=null">
+    	and (fp.name like '%'||#{page.field.keyword}||'%'
+    	or fp.texture like '%'||#{page.field.keyword}||'%')
+    </if><choose>
+    	<when test="page.field.typeid !=null"> and fp.type =#{page.field.typeid}</when>
+    	<otherwise>
+		     <if test="page.fields.typeid !=null"> and fp.type in
+		   		<foreach collection="page.fields.typeid" open="(" close=")" 
+		   	    	separator="," item="item" index="index">#{item}</foreach>
+		    </if>
+    	</otherwise>
+    </choose>order by fp.status<if test="page.field.createTime !=null">
+     	,fp.create_Time ${page.field.createTime}</if>
+     <if test="page.field.saleNum !=null">
+     	,fp.sale_Num ${page.field.saleNum}
+     </if><if test="page.field.price !=null">
+     	,fp.price ${page.field.price}
+     </if>,fp.create_Time desc
+     limit #{page.pageSize} offset #{page.offset}
+</select>
+<!-- 产品详情页的推荐产品 -->
+<select id="findLikeTarget" resultType="java.util.HashMap" useCache="true" 
+    parameterType="personal.deon.framework.fuliao.entity.FuliaoProduct">
+    select fp.id,fp.name,fp.units,fp.model,fp.stock_Num as sotcknum,fp.price,
+    	fp.sale_Num as salenum,fp.grade_Score as gradescore,fp.coverimg
+    from fuliao_Product fp inner join fuliao_shop fs on fp.shop= fs.id 
+    inner join fuliao_user fec on fs.shopkeeper = fec.id 
+    left join fuliao_producttype fpt on fp.type = fpt.id
+    where fp.status=0 and fs.status = 1 <if test="product != null and product.type !=null">
+    	and fp.id !=#{product.id} and fp.type = #{product.type.id}
+    </if>
+    order by fec.vip_Level desc,fp.create_Time desc
+    limit 4 offset 0
+</select>
+<!-- 店铺详情页面推荐产品 -->
+<select id="findSelfShopElectProduct" resultType="java.util.HashMap" useCache="true" 
+    parameterType="personal.deon.framework.fuliao.entity.FuliaoShop">
+     select fp.id,fp.name,fp.units,fp.model,fp.stock_Num as sotcknum,fp.price,
+    	fp.sale_Num as salenum,fp.grade_Score as gradescore,fp.coverimg
+    from fuliao_Product fp where fp.status=0 <if test="shop !=null and shop.id !=null">
+    and fp.shop = #{shop.id} </if> order by fp.index asc,fp.create_Time desc,fp.stock_Num desc
+    limit 6 offset 0
+</select>
+</mapper> 

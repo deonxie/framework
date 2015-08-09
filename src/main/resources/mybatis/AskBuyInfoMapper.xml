@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="personal.deon.framework.fuliao.repository.mybatis.AskBuyInfoMapper">
+
+<!-- 查询用户自己求购信息 -->
+<select id="selfAskbuyinfoList" resultType="java.util.HashMap" useCache="true" 
+    parameterType="personal.deon.framework.fuliao.dto.PageUtilDto">
+    select fabi.coverimg,fabi.requirement,fabi.id,fabi.units,fabi.status,
+	fabi.request_Num as requestnum,fabi.create_Time as createtime,fabi.handsel,fabi.amount,
+	fabi.order_Status as orderStatus, fabi.result
+    from fuliao_askbuyinfo fabi
+    where fabi.own_User=#{userid} 
+    <choose>
+        <when test="page.field.option ==1"> and fabi.status=0 and fabi.result=0 and fabi.order_Status=0 </when>
+    	<when test="page.field.option ==2"> and fabi.status=1 and fabi.result!=0 and fabi.order_Status=0 </when>
+    	<when test="page.field.option ==3"> and fabi.status=2 and fabi.result=1 and fabi.order_Status=0 </when>
+        <when test="page.field.option ==4"> and fabi.status=2 and fabi.result!=0  </when>
+    </choose>
+    <if test="page.field.keyword !=null">
+    	and fabi.requirement like '%'||#{page.field.keyword}||'%'
+    </if> order by fabi.create_Time desc
+    limit #{page.pageSize} offset #{page.offset}
+</select>
+
+<!-- 未匹配产品的求购列表 -->
+<select id="macthAskbuyList" resultType="java.util.HashMap" useCache="true" 
+    parameterType="personal.deon.framework.fuliao.dto.PageUtilDto">
+    select fabi.coverimg,fabi.requirement,fabi.id,fabi.units,fabi.status,
+	fabi.request_Num as requestnum,fabi.create_Time as createtime
+    from fuliao_askbuyinfo fabi inner join fuliao_user fu on fu.id = fabi.own_User
+    where fabi.status =0 
+    order by fu.vip_Level desc,fu.ask_Level desc,fabi.create_Time desc
+    limit #{page.pageSize} offset #{page.offset}
+</select>
+
+<select id="matchingProduct" resultType="java.util.HashMap" useCache="true" 
+    parameterType="personal.deon.framework.fuliao.dto.PageUtilDto">
+    select fp.id,fp.name,fp.texture,fp.descript,fp.coverimg ,fp.price,fp.units,
+    fs.shop_Name as shopName,fs.tel_Num as telNum,fs.tel_Name as telName,fs.address,fs.other_Contact as otherContact
+    from fuliao_Product fp 
+    left join fuliao_producttype fpt on fp.type= fpt.id
+    left join fuliao_shop fs on fp.shop=fs.id
+    left join fuliao_user fu on fs.shopkeeper = fu.id
+    where fp.status=0 and fs.status=1
+    <choose><when test="page.field.keyword !=null">
+	      and( fp.name like '%'||#{page.field.keyword}||'%'
+	   		<if test="page.field.texture !=null">
+	   	  or fp.texture like '%'||#{page.field.keyword}||'%'
+	   		</if>
+	   		<if test="page.field.descript !=null">
+	      or fp.descript like '%'||#{page.field.keyword}||'%'
+	   		</if>
+	   		<choose><when test="page.field.typename !=null">
+		      or fpt.type_Name like '%'||#{page.field.keyword}||'%')
+			   </when><otherwise>
+			   		) <if test="page.field.typeid !=null">and fp.type=#{page.field.typeid}</if>
+			   </otherwise>
+		   </choose>
+   		</when><otherwise>
+	   		<if test="page.field.typeid !=null">and fp.type=#{page.field.typeid}</if>
+	   </otherwise>
+   	</choose>
+   	order by fu.vip_Level desc,fu.shop_Level desc,fp.shop asc
+   	limit #{page.pageSize} offset #{page.offset}
+</select>
+
+</mapper> 
+
+	

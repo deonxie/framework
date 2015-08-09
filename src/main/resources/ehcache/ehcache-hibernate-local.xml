@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache updateCheck="false" name="hibernateCache">
+
+	<diskStore path="java.io.tmpdir/ehcache/think/hibernate" />
+
+	<!-- DefaultCache setting. -->
+	<defaultCache maxEntriesLocalHeap="10000" eternal="false"
+		timeToIdleSeconds="300" timeToLiveSeconds="600" overflowToDisk="true"
+		maxEntriesLocalDisk="100000" />
+	<!-- Special objects setting. -->
+	<cache name="personal.deon.framework.core.entity.CoreUser"
+		maxEntriesLocalHeap="1000" eternal="true" overflowToDisk="true"
+		maxEntriesLocalDisk="10000" />
+	<cache name="personal.deon.framework.core.entity.CoreRole"
+		maxEntriesLocalHeap="100" eternal="true" overflowToDisk="true"
+		maxEntriesLocalDisk="1000" />
+	<cache name="personal.deon.framework.core.entity.CoreConfig"
+		maxEntriesLocalHeap="1000" eternal="true" overflowToDisk="true"
+		maxEntriesLocalDisk="10000" />
+	<cache name="personal.deon.framework.fuliao.entity.FuliaoUser"
+		maxEntriesLocalHeap="1000" eternal="true" overflowToDisk="true"
+		maxEntriesLocalDisk="10000" />
+	<cache name="personal.deon.framework.fuliao.entity.AskBuyInfo"
+	    maxEntriesLocalHeap="1000" eternal="true" overflowToDisk="true"
+	    maxEntriesLocalDisk="1000"/>
+	<cache name="personal.deon.framework.fuliao.entity.FuliaoProduct"
+	    maxEntriesLocalHeap="1000" eternal="true" overflowToDisk="true"
+	    maxEntriesLocalDisk="1000"/>
+	<cache name="personal.deon.framework.fuliao.entity.FuliaoShop"
+	    maxEntriesLocalHeap="1000" eternal="true" overflowToDisk="true"
+	    maxEntriesLocalDisk="1000"/>
+
+</ehcache>
