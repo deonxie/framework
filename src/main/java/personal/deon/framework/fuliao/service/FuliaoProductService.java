@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.annotation.PostConstruct;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,6 +15,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import personal.deon.framework.core.repository.GenericDao;
+import personal.deon.framework.core.service.CoreConfigService;
 import personal.deon.framework.core.service.GenericService;
 import personal.deon.framework.fuliao.dto.PageUtilDto;
 import personal.deon.framework.fuliao.entity.FuliaoProduct;
@@ -27,7 +30,18 @@ public class FuliaoProductService extends GenericService<FuliaoProduct> {
 	FuliaoProductDao dao;
 	@Autowired
 	FuliaoProductMapper mapper;
+	private static String waterText = null;
 	
+	@PostConstruct
+	public void init(){
+		CoreConfigService.addConstKey("fulicao.product.img.water.text", "辅料产品图片的水印文字");
+	}
+	public static String productWaterText(){
+		if(StringUtils.isBlank(waterText)){
+			waterText = CoreConfigService.getValue("fulicao.product.img.water.text");
+		}
+		return waterText;
+	}
 	
 	public List<Map<String,Object>> fuliaoproductIndexPage(PageUtilDto page) {
 		return mapper.fuliaoproductIndexPage(page);

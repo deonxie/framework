@@ -2,17 +2,13 @@
 <%@ include file="/WEB-INF/views/include/taglibs.jsp"%>
 <%@ taglib prefix="sitemesh" uri="http://www.opensymphony.com/sitemesh/decorator" %>
 <!DOCTYPE html>
-<html style="overflow-x:hidden;overflow-y:auto;">
+<html lang="zh-cn">
 <head>
     <title><sitemesh:title/></title>
-    <%@include file="../include/mobile.jsp" %>
+    <%@include file="../include/mobile2.jsp" %>
     <sitemesh:head/>
 </head>
-<body style="padding-bottom: 55px;">
+<body>
 <sitemesh:body/>
-<style type="text/css">
-    a:HOVER {text-decoration: none;}
-    .active{color: purple;}
-</style>
 </body>
 </html>

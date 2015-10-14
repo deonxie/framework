@@ -20,8 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.google.common.collect.Maps;
 
-import personal.deon.framework.weixin.entity.WeixinPerOrder;
-import personal.deon.framework.weixin.service.WeixinPerOrderService;
+import personal.deon.framework.weixin.entity.WeixinPayedOrder;
+import personal.deon.framework.weixin.service.WeixinPayedOrderService;
 import personal.deon.framework.weixin.util.WeixinPayUtil;
 
 
@@ -30,7 +30,7 @@ import personal.deon.framework.weixin.util.WeixinPayUtil;
 public class WeixinPayNoticeController{
 	static Logger logger = LoggerFactory.getLogger(WeixinPayNoticeController.class);
 	@Autowired
-	WeixinPerOrderService worderSer;
+	WeixinPayedOrderService worderSer;
 	
 	@RequestMapping(value="",produces={MediaType.APPLICATION_XML_VALUE})
 	public String weixin(HttpServletRequest request){
@@ -38,13 +38,14 @@ public class WeixinPayNoticeController{
 		if("SUCCESS".equals(msg.get("return_code")) &&
 			"SUCCESS".equals(msg.get("result_code"))){
 			if(WeixinPayUtil.checkeSign(msg)){
-				WeixinPerOrder worder = worderSer.findByOut_trade_no(msg.get("out_trade_no"));
-				if(worder != null){
-					worder.fieldValue(msg);
-					worderSer.save(worder);
-					return "<xml><return_code><![CDATA[SUCCESS]]></return_code>"
-							+ "<return_msg><![CDATA[OK]]></return_msg></xml>";
+				WeixinPayedOrder worder = worderSer.findByTransaction_id(msg.get("transaction_id"));
+				if(worder == null){
+					worder = new WeixinPayedOrder();
 				}
+				worder.fieldValue(msg);
+				worderSer.save(worder);
+				return "<xml><return_code><![CDATA[SUCCESS]]></return_code>"
+				+ "<return_msg><![CDATA[OK]]></return_msg></xml>";
 			}else{
 				logger.warn("通知消息体被篡改");
 			}

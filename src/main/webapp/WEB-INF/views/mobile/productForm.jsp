@@ -97,7 +97,7 @@
 	    </div><br>
 	    <div class="form-group">
 			<input class="btn btn-primary form-control input-lg" type="submit" 
-				value="发 布 产 品" />&nbsp;
+				value="发 布 产 品" onclick="$(this).attr('disabled',true);"/>&nbsp;
 		</div>
     </form>
     

@@ -100,30 +100,36 @@ public class UpdateFuliaoProductController extends GenericController {
 				sb.append(dbimgs[0]).append(FuliaoProduct.split);
 			}else{
 				imgs0 = WeixinFileUtil.downloadFile(imgs0, root+saveDir);
-				if(StringUtils.isNotBlank(imgs0))
+				if(StringUtils.isNotBlank(imgs0)){
 					sb.append(saveDir).append(imgs0).append(FuliaoProduct.split);
+					ImageUtil.waterText(root+saveDir+imgs0, FuliaoProductService.productWaterText(), 15);
+				}
 			}
 		}if(StringUtils.isNotBlank(imgs1)){
 			if("1".equals(imgs1) && dbimgs.length>1){
 				sb.append(dbimgs[1]).append(FuliaoProduct.split);
 			}else{
 				imgs1 = WeixinFileUtil.downloadFile(imgs1, root+saveDir);
-				if(StringUtils.isNotBlank(imgs1))
+				if(StringUtils.isNotBlank(imgs1)){
 					sb.append(saveDir).append(imgs1).append(FuliaoProduct.split);
+					ImageUtil.waterText(root+saveDir+imgs1, FuliaoProductService.productWaterText(), 15);
+				}
 			}
 		}if(StringUtils.isNotBlank(imgs2)){
 			if("1".equals(imgs2) && dbimgs.length>2){
 				sb.append(dbimgs[2]).append(FuliaoProduct.split);
 			}else{
 				imgs2 = WeixinFileUtil.downloadFile(imgs2, root+saveDir);
-				if(StringUtils.isNotBlank(imgs2))
+				if(StringUtils.isNotBlank(imgs2)){
 					sb.append(saveDir).append(imgs2).append(FuliaoProduct.split);
+					ImageUtil.waterText(root+saveDir+imgs2, FuliaoProductService.productWaterText(), 15);
+				}
 			}
 		}
 		if(sb.length()>0){
 			product.setImgNames(sb.substring(0,sb.lastIndexOf(FuliaoProduct.split)));
 			product.setStatus(FuliaoProduct.status_enable);
-			String cover = ImageUtil.scale(root+product.getImgs()[0], 200, 150, 'S', null, false);
+			String cover = ImageUtil.scale(root+product.getImgs()[0], 200, 150,8, 'S',null, false);
 			if(StringUtils.isNotBlank(cover))
 				product.setCoverimg(saveDir+cover);
 		}else{

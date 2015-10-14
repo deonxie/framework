@@ -6,22 +6,25 @@ import org.springframework.transaction.annotation.Transactional;
 
 import personal.deon.framework.core.repository.GenericDao;
 import personal.deon.framework.core.service.GenericService;
-import personal.deon.framework.weixin.entity.WeixinPerOrder;
-import personal.deon.framework.weixin.repository.WeixinPerOrderDao;
+import personal.deon.framework.weixin.entity.WeixinPayedOrder;
+import personal.deon.framework.weixin.repository.WeixinPayedOrderDao;
 
 @Service
 @Transactional(readOnly=true)
-public class WeixinPerOrderService extends GenericService<WeixinPerOrder> {
+public class WeixinPayedOrderService extends GenericService<WeixinPayedOrder> {
 	@Autowired
-	WeixinPerOrderDao dao;
+	WeixinPayedOrderDao dao;
 	
 	@Override
-	public GenericDao<WeixinPerOrder> getGenericDao() {
+	public GenericDao<WeixinPayedOrder> getGenericDao() {
 		return dao;
 	}
 
-	public WeixinPerOrder findByOut_trade_no(String outTradeNo) {
+	public WeixinPayedOrder findByOut_trade_no(String outTradeNo) {
 		return dao.findByOut_trade_no(outTradeNo);
 	}
-
+	
+	public WeixinPayedOrder findByTransaction_id(String transactionId) {
+		return dao.findByTransaction_id(transactionId);
+	}
 }

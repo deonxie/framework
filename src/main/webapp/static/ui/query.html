@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="format-detection" content="telephone=no">
+<meta name="viewport"
+	content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>mobile jquery</title>
+
+<link rel="stylesheet" type="text/css" href="../jquery.mobile/1.4.5/jquery.mobile.custom.theme.min.css" />
+<link rel="stylesheet" type="text/css" href="../jquery.mobile/1.4.5/jquery.mobile.custom.structure.min.css" />
+<script type="text/javascript" src="../jquery/jquery-1.9.1.min.js" ></script>
+<script type="text/javascript" src="../jquery.mobile/1.4.5/jquery.mobile.custom.min.js"></script>
+</head>
+<body>
+
+
+<div data-role="page" id="pageone">
+  <div data-role="header">
+    <h1>欢迎来到我的主页1</h1>
+  </div>
+
+  <div data-role="content">
+    <p>Welcome!</p>
+    <a href="#pagetwo" data-rel="dialog">Go to Page Two</a>
+  </div>
+
+  <div data-role="footer">
+    <h1>底部文本1</h1>
+  </div>
+</div> 
+
+<div data-role="page" id="pagetwo">
+  <div data-role="header">
+    <h1>I'm A Dialog Box!</h1>
+  </div>
+
+  <div data-role="content">
+    <p>The dialog box is different from a normal page, it is displayed on top of the current page with a dark background color. It will not span the entire width of the page. The dialog has an icon of "X" in the header to close the box.</p>
+    <a href="#pageone">Go to Page One</a>
+  </div>
+
+  <div data-role="footer">
+    <h1>底部文本</h1>
+  </div>
+</div> 
+
+
+</body>
+</html>

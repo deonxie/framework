@@ -56,7 +56,7 @@ public class UpdateAskBuyInfoController extends GenericController {
 			String root = request.getServletContext().getRealPath("static");
 			String saveDir = "/upload/askbuy/";
 			ask.setImgName(saveDir+WeixinFileUtil.downloadFile(ask.getImgName(), root+saveDir));
-			String cover = ImageUtil.scale(root+ask.getImgName(), 200, 150, 'S', null, false);
+			String cover = ImageUtil.scale(root+ask.getImgName(), 200, 150, 8, 'S', null, false);
 			if(StringUtils.isNotBlank(cover))
 				ask.setCoverimg(saveDir+cover);
 		}

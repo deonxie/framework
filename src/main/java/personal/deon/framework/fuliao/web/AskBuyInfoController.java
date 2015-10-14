@@ -29,26 +29,28 @@ public class AskBuyInfoController extends GenericController {
 	@ResponseBody
 	public boolean createimg(HttpServletRequest request){
 		String root = request.getServletContext().getRealPath("static");
-		String saveDir = "/upload/product/";
 		List<FuliaoProduct> list = pser.getAll();
 		for(FuliaoProduct p:list){
-			if(StringUtils.isNotBlank(p.getImgNames())&& StringUtils.isBlank(p.getCoverimg())){
-				String cover = ImageUtil.scale(root+p.getImgs()[0], 200, 150, 'S', null, false);
-				if(StringUtils.isNotBlank(cover))
-					p.setCoverimg(saveDir+cover);
+			String[] imgs = p.getImgs();
+			if(imgs!=null){
+				for(String s: imgs){
+					ImageUtil.waterText(root+s, FuliaoProductService.productWaterText(), 15);
+				}
+			}
+			if(StringUtils.isNotBlank(p.getCoverimg())){
+				ImageUtil.waterText(root+p.getCoverimg(), FuliaoProductService.productWaterText(), 8);
 			}
 		}
 		pser.save(list);
-		saveDir = "/upload/askbuy/";
-		List<AskBuyInfo> aslist = ser.getAll();
-		for(AskBuyInfo a:aslist){
-			if(StringUtils.isNotBlank(a.getImgName()) &&StringUtils.isBlank(a.getCoverimg())){
-				String cover = ImageUtil.scale(root+a.getImgName(), 200, 150, 'S', null, false);
-				if(StringUtils.isNotBlank(cover))
-					a.setCoverimg(saveDir+cover);
-			}
-		}
-		ser.save(aslist);
+//		List<AskBuyInfo> aslist = ser.getAll();
+//		for(AskBuyInfo a:aslist){
+//			if(StringUtils.isNotBlank(a.getImgName()) &&StringUtils.isBlank(a.getCoverimg())){
+//				String cover = ImageUtil.scale(root+a.getImgName(), 200, 150, 8, 'S', null, false);
+//				if(StringUtils.isNotBlank(cover))
+//					a.setCoverimg(saveDir+cover);
+//			}
+//		}
+//		ser.save(aslist);
 		return true;
 	} 
 }

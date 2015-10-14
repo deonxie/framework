@@ -1,22 +1,17 @@
-package personal.deon.framework.weixin.entity;
+package personal.deon.framework.weixin.dto;
 
 import java.lang.reflect.Field;
 import java.util.Map;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
 
 import com.google.common.collect.Maps;
 
-import personal.deon.framework.core.entity.AbsEntity;
 /***
  * 生成微信预支付订单
  * @author jlusoft
  *
  */
-@Entity
-@Table(name="weixin_perorder")
-public class WeixinPerOrder extends AbsEntity {
+public class WeixinPerOrderDto{
 	/**终端设备号(门店号或收银设备ID)，注意：PC网页或公众号内支付请传"WEB" 
 	 * device_info	否**/
 	private String device_info;
@@ -89,23 +84,6 @@ public class WeixinPerOrder extends AbsEntity {
 	private String err_code;
 	/**错误代码描述 	err_code_des*/
 	private String err_code_des;
-	/**==========================通知字段==========================**/
-	/**付款银行**/
-	private String bank_type;
-	/***是否关注公众账号**/
-	private String is_subscribe;
-	/***现金支付金额**/
-	private Integer cash_fee;
-	/**现金支付货币类型**/
-	private String cash_fee_type;
-	/**代金券或立减优惠金额*/
-	private Integer coupon_fee;
-	/**代金券或立减优惠使用数量**/
-	private Integer coupon_count;
-	/**微信支付订单号**/
-	private String transaction_id;
-	/**支付完成时间**/
-	private String time_end;
 	/**
 	 * @return {@link #device_info}
 	 */
@@ -394,103 +372,6 @@ public class WeixinPerOrder extends AbsEntity {
 	public void setReturn_msg(String return_msg) {
 		this.return_msg = return_msg;
 	}
-	/**
-	 * @return {@link #bank_type}
-	 */
-	public String getBank_type() {
-		return bank_type;
-	}
-	/**
-	 * {@link #bank_type}
-	 */
-	public void setBank_type(String bank_type) {
-		this.bank_type = bank_type;
-	}
-	/**
-	 * @return {@link #is_subscribe}
-	 */
-	public String getIs_subscribe() {
-		return is_subscribe;
-	}
-	/**
-	 * {@link #is_subscribe}
-	 */
-	public void setIs_subscribe(String is_subscribe) {
-		this.is_subscribe = is_subscribe;
-	}
-	/**
-	 * @return {@link #cash_fee}
-	 */
-	public Integer getCash_fee() {
-		return cash_fee;
-	}
-	/**
-	 * {@link #cash_fee}
-	 */
-	public void setCash_fee(Integer cash_fee) {
-		this.cash_fee = cash_fee;
-	}
-	/**
-	 * @return {@link #cash_fee_type}
-	 */
-	public String getCash_fee_type() {
-		return cash_fee_type;
-	}
-	/**
-	 * {@link #cash_fee_type}
-	 */
-	public void setCash_fee_type(String cash_fee_type) {
-		this.cash_fee_type = cash_fee_type;
-	}
-	/**
-	 * @return {@link #coupon_fee}
-	 */
-	public Integer getCoupon_fee() {
-		return coupon_fee;
-	}
-	/**
-	 * {@link #coupon_fee}
-	 */
-	public void setCoupon_fee(Integer coupon_fee) {
-		this.coupon_fee = coupon_fee;
-	}
-	/**
-	 * @return {@link #coupon_count}
-	 */
-	public Integer getCoupon_count() {
-		return coupon_count;
-	}
-	/**
-	 * {@link #coupon_count}
-	 */
-	public void setCoupon_count(Integer coupon_count) {
-		this.coupon_count = coupon_count;
-	}
-	/**
-	 * @return {@link #transaction_id}
-	 */
-	public String getTransaction_id() {
-		return transaction_id;
-	}
-	/**
-	 * {@link #transaction_id}
-	 */
-	public void setTransaction_id(String transaction_id) {
-		this.transaction_id = transaction_id;
-	}
-	/**
-	 * @return {@link #time_end}
-	 */
-	public String getTime_end() {
-		return time_end;
-	}
-	/**
-	 * {@link #time_end}
-	 */
-	public void setTime_end(String time_end) {
-		this.time_end = time_end;
-	}
-	
 	public Map<String,String> fieldValue(){
 		Field[] fields = getClass().getDeclaredFields();
 		Map<String,String> map = Maps.newHashMap();

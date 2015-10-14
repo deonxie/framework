@@ -14,9 +14,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import personal.deon.framework.fuliao.entity.OrderRecord;
 import personal.deon.framework.fuliao.service.OrderRecordService;
-import personal.deon.framework.weixin.entity.WeixinPerOrder;
+import personal.deon.framework.weixin.dto.WeixinPerOrderDto;
 import personal.deon.framework.weixin.service.WeixinConfigService;
-import personal.deon.framework.weixin.service.WeixinPerOrderService;
 import personal.deon.framework.weixin.util.WeixinPayUtil;
 
 @Controller
@@ -25,8 +24,6 @@ public class MobilePayController {
 	Logger logger = LoggerFactory.getLogger(MobilePayController.class);
 	@Autowired
 	OrderRecordService orderSer;
-	@Autowired
-	WeixinPerOrderService worderSer;
 	/**
 	 * 调用支付接口
 	 * @param orderId
@@ -147,24 +144,18 @@ public class MobilePayController {
 			}
 			if(fee<=0)
 				return null;
-			WeixinPerOrder worder = worderSer.findByOut_trade_no(orderId);
-			if(worder == null){
-				worder= new WeixinPerOrder();
-				worder.setAttach(""+option);
-				worder.setBody("订单号:"+order.getOrderId());
-				worder.setNotify_url(WeixinConfigService.getWeburl()+"/mobile/weixin/paynotice");
-				worder.setOpenid(openid);
-				worder.setOut_trade_no(order.getId());
-				worder.setSpbill_create_ip(WeixinConfigService.getServerIp());
-				worder.setTotal_fee(fee);
-				worder.setTrade_type("JSAPI");
-				worder.setDetail("支付订单："+order.getOrderId());
-				WeixinPayUtil.unifiedorder(worder);
-				if(StringUtils.isNotBlank(worder.getPrepay_id())){
-					worderSer.save(worder);
-					logger.info("得到支付id：{}",worder.getPrepay_id());
-				}
-			}
+			WeixinPerOrderDto worder = new WeixinPerOrderDto();
+			worder.setAttach(""+option);
+			worder.setBody("订单号:"+order.getOrderId());
+			worder.setNotify_url(WeixinConfigService.getWeburl()+"/mobile/weixin/paynotice");
+			worder.setOpenid(openid);
+			worder.setOut_trade_no(order.getId());
+			worder.setSpbill_create_ip(WeixinConfigService.getServerIp());
+			worder.setTotal_fee(fee);
+			worder.setTrade_type("JSAPI");
+			worder.setDetail("支付订单："+order.getOrderId());
+			WeixinPayUtil.unifiedorder(worder);
+			logger.info("得到支付id：{}",worder.getPrepay_id());
 			return worder.getPrepay_id();
 		}
 		return null;

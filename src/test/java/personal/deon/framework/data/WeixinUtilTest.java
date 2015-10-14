@@ -9,15 +9,16 @@ import com.google.common.collect.Maps;
 
 import personal.deon.framework.fuliao.entity.OrderRecord;
 import personal.deon.framework.fuliao.util.ImageUtil;
-import personal.deon.framework.weixin.entity.WeixinPerOrder;
+import personal.deon.framework.weixin.entity.WeixinPayedOrder;
+import personal.deon.framework.weixin.dto.WeixinPerOrderDto;
 import personal.deon.framework.weixin.service.WeixinConfigService;
 import personal.deon.framework.weixin.util.HttpNetUtil;
 import personal.deon.framework.weixin.util.WeixinPayUtil;
 
 public class WeixinUtilTest {
 	public static void main(String[] args) {
-		WeixinPerOrder worder;
-		worder= new WeixinPerOrder();
+		WeixinPerOrderDto worder;
+		worder= new WeixinPerOrderDto();
 		worder.setAttach(""+1);
 		worder.setBody("订单号:"+"123123214354353");
 		worder.setNotify_url("http://www.fuliao168.com/fuliao"+"/mobile/weixin/paynotice");
@@ -27,9 +28,14 @@ public class WeixinUtilTest {
 		worder.setTotal_fee(1);
 		worder.setTrade_type("JSAPI");
 		worder.setDetail("支付订单："+"123123214354353");
-		worder.setCash_fee(null);
-		WeixinPayUtil.unifiedorder(worder);
-		
+//		WeixinPayUtil.unifiedorder(worder);
+//		ImageUtil.scale("/Users/jlusoft/Documents/bcd.jpg", 200, 150,8, 'S', "中大辅料", false);
+//		ImageUtil.waterText("/Users/jlusoft/Documents/bcd.jpg", "中大辅料",15);
+		WeixinPayedOrder payed = new WeixinPayedOrder();
+		Map<String, String> map = Maps.newHashMap();
+		map.put("total_fee", "1");
+		payed.fieldValue(map);;
+		payed.getTotal_fee();
 	}
 	private static String toXml(Map<String,String> fields){
 		StringBuffer sb = new StringBuffer("<xml>");

@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Maps;
 
-import personal.deon.framework.weixin.entity.WeixinPerOrder;
+import personal.deon.framework.weixin.dto.WeixinPerOrderDto;
 import personal.deon.framework.weixin.service.WeixinConfigService;
 
 
@@ -50,7 +50,7 @@ public class WeixinPayUtil {
 	 * 在微信端生成预支付订单
 	 * @param perOrder
 	 */
-	public static void unifiedorder(WeixinPerOrder perOrder){
+	public static void unifiedorder(WeixinPerOrderDto perOrder){
 		String result = HttpNetUtil.postJson(
 				"https://api.mch.weixin.qq.com/pay/unifiedorder",toXml(perOrder.fieldValue()));
 		perOrder.fieldValue(parseXml(result));
